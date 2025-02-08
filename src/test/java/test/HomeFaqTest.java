@@ -13,7 +13,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pageObjects.HomeFaq;
+import pageObjects.HomeFaqPage;
 
 import java.time.Duration;
 
@@ -27,7 +27,7 @@ public class HomeFaqTest {
 
     WebDriver driver;
     WebDriverWait wait;
-    HomeFaq homeFaq;
+    HomeFaqPage homeFaqPage;
 
     private final String question;
     private final String expectedAnswer;
@@ -47,7 +47,7 @@ public class HomeFaqTest {
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10L));
         driver.get("https://qa-scooter.praktikum-services.ru/");
-        homeFaq = new HomeFaq(driver);
+        homeFaqPage = new HomeFaqPage(driver);
 
         // Подтверждаем куки
         WebElement cookieButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("rcc-confirm-button")));
@@ -80,10 +80,10 @@ public class HomeFaqTest {
     @Test
     public void testFaq() {
 // клик по вопросу
-        homeFaq.clickOnQuestion(questionIndex);
+        homeFaqPage.clickOnQuestion(questionIndex);
 
         // отображается ответ соответствующего вопроса
-        String siteAnswerText = homeFaq.getAnAnswer(questionIndex);
+        String siteAnswerText = homeFaqPage.getAnAnswer(questionIndex);
 
         assertTrue(siteAnswerText.contains(expectedAnswer));
 

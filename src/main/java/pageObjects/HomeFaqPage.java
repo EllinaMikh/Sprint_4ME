@@ -3,7 +3,7 @@ package pageObjects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class HomeFaq {
+public class HomeFaqPage {
     private final WebDriver driver;
 
     //локатор для появляющихся вопросов
@@ -30,7 +30,7 @@ public class HomeFaq {
                By.xpath("//*[@id='accordion__panel-7']/p")
     };
 
-    public HomeFaq(WebDriver driver) {
+    public HomeFaqPage(WebDriver driver) {
         this.driver = driver;
     }
 // Метод для клика на вопрос
