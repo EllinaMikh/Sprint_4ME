@@ -50,8 +50,7 @@ public class HomeFaqTest {
         homeFaqPage = new HomeFaqPage(driver);
 
         // Подтверждаем куки
-        WebElement cookieButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("rcc-confirm-button")));
-        cookieButton.click();
+        homeFaqPage.cookieButtonClick(wait);
     }
 
     @After

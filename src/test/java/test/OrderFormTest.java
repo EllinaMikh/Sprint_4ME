@@ -13,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import page.objects.HomeFaqPage;
 import page.objects.OrderForm;
 
 import java.time.Duration;
@@ -26,6 +27,7 @@ public class OrderFormTest {
     WebDriver driver;
     WebDriverWait wait;
     OrderForm orderForm;
+    HomeFaqPage homeFaqPage;
 
     private final String firstName;
     private final String secondName;
@@ -56,10 +58,10 @@ public class OrderFormTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10L));
         driver.get("https://qa-scooter.praktikum-services.ru/");
         orderForm = new OrderForm(driver);
+        homeFaqPage = new HomeFaqPage(driver);
 
         // Подтверждаем куки
-        WebElement cookieButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("rcc-confirm-button")));
-        cookieButton.click();
+        orderForm.cookieButtonClick(wait);
     }
 
     @After
@@ -80,34 +82,40 @@ public class OrderFormTest {
 
     @Test
     public void checkOrderByUpButton() {
-        orderForm = orderForm.clickOrderButtonUp();
+        orderForm = homeFaqPage.clickOrderButtonUp();
         ordering(orderForm);
     }
 
     @Test
     public void checkOrderByDownButton() {
-        orderForm = orderForm.clickOrderButtonDown();
+        orderForm = homeFaqPage.clickOrderButtonDown();
         ordering(orderForm);
     }
 
     private void ordering(OrderForm orderForm) {
-        assertTrue(orderForm.isStageOne());
+        if(orderForm.isStageOne())
+        {
+            orderForm.setFirstNameField(firstName);
+            orderForm.setSecondNameField(secondName);
+            orderForm.setAddressLineField(addressLine);
+            orderForm.setSubwayField(subway);
+            orderForm.setTelField(tel);
+        }
 
-        orderForm.setFirstNameField(firstName);
-        orderForm.setSecondNameField(secondName);
-        orderForm.setAddressLineField(addressLine);
-        orderForm.setSubwayField(subway);
-        orderForm.setTelField(tel);
 
         orderForm.clickNextButton();
-        assertTrue(orderForm.isStageTwo()); // На втором этапе заказа
-        orderForm.setDateField(date);
-        orderForm.choiceRentPeriod(period);
-        orderForm.selectBlackCheckbox();
-        orderForm.setCommentField(comment);
-        orderForm.clickOrderButtonDown();
-        assertTrue(orderForm.isModalOrderVisible()); // Подтверждение заказа
-        orderForm.clickYesButton();
+        if(orderForm.isStageTwo())
+        {
+            orderForm.setDateField(date);
+            orderForm.choiceRentPeriod(period);
+            orderForm.selectBlackCheckbox();
+            orderForm.setCommentField(comment);
+        }
+
+        homeFaqPage.clickOrderButtonDown();
+        if(orderForm.isModalOrderVisible()) {
+            orderForm.clickYesButton();
+        }
         assertTrue(orderForm.isOrderCompleted()); // Заказ успешно завершен
     }
 

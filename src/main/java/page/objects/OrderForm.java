@@ -38,11 +38,6 @@ public class OrderForm {
 
     private final By commentField = By.xpath(".//div[starts-with(@class, 'Input_InputContainer')]/input[@placeholder='Комментарий для курьера']");
 
-    private final By orderButtonDown = By.xpath(".//div[starts-with(@class, 'Order_Buttons')]/button[text()='Заказать'] ");
-
-    private final By orderButtonUp = By.xpath(".//div[starts-with(@class, 'Header_Nav')]/button[text()='Заказать']");
-
-
     private final By modalHeader = By.xpath(".//div[starts-with(@class, 'Order_Modal')]/div[text()='Хотите оформить заказ?']");
 
     private final By yesButton = By.xpath(".//div[starts-with(@class, 'Order_Modal')]//button[text()='Да']");
@@ -65,6 +60,7 @@ public class OrderForm {
     public void setFirstNameField(String firstName) {
         putText(driver.findElement(firstNameField), firstName);
     }
+
 
     public void setSecondNameField(String secondName) {
         putText(driver.findElement(secondNameField), secondName);
@@ -134,17 +130,6 @@ public class OrderForm {
         putText(driver.findElement(commentField), comment);
     }
 
-    public OrderForm clickOrderButtonUp() {
-        driver.findElement(orderButtonUp).click();
-        return new OrderForm(driver);
-    }
-
-    // Метод для клика на нижнюю кнопку "Заказать"
-    public OrderForm clickOrderButtonDown() {
-        driver.findElement(orderButtonDown).click();
-        return new OrderForm(driver);
-    }
-
     public boolean isModalOrderVisible() {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(modalHeader));
@@ -159,6 +144,12 @@ public class OrderForm {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(orderCompleted));
         return driver.findElement(orderStageTwoHeader).isDisplayed();
+    }
+
+    public void cookieButtonClick (WebDriverWait wait)
+    {
+        var cookieButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("rcc-confirm-button")));
+        cookieButton.click();
     }
 
 }
